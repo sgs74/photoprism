@@ -16,7 +16,7 @@ services:
 
   photoprism:
     build: .
-    image: 877976363238.dkr.ecr.ap-southeast-1.amazonaws.com/shoprepo:294efcfb05d580bf729e4ce67fa7657ce4ad5681
+    image: photoprism/photoprism:develop
     security_opt:
       - seccomp:unconfined
       - apparmor:unconfined
