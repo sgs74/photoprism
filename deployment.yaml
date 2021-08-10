@@ -1,67 +1,21 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: photoprism
-  namespace: photoprism
+  name: photo-deployment
+  labels:
+    app: nginx
 spec:
+  replicas: 2
   selector:
     matchLabels:
-      app: photoprism
-  serviceName: photoprism
-  replicas: 1
+      app: nginx
   template:
     metadata:
       labels:
-        app: photoprism
+        app: nginx
     spec:
       containers:
-      - name: photoprism
-        image: 877976363238.dkr.ecr.ap-southeast-1.amazonaws.com/shoprepo:cac51455cca3e4aa4fd9a0c6eb132875f8d0727f
-        env:
-        - name: PHOTOPRISM_DEBUG
-          value: "true"
-        - name: PHOTOPRISM_CACHE_PATH
-          value: /assets/cache
-        - name: PHOTOPRISM_IMPORT_PATH
-          value: /assets/photos/import
-        - name: PHOTOPRISM_EXPORT_PATH
-          value: /assets/photos/export
-        - name: PHOTOPRISM_ORIGINALS_PATH
-          vale: /assets/photos/originals
-        - name: PHOTOPRISM_DATABASE_DRIVER
-          value: mysql
-        - name: PHOTOPRISM_HTTP_HOST
-          value: 0.0.0.0
-        - name: PHOTOPRISM_HTTP_PORT
-          value: "2342"
-
+      - name: nginx
+        image: nginx:1.16
         ports:
         - containerPort: 2342
-          name: http
-        volumeMounts:
-        - mountPath: /assets/photos/originals
-          name: originals
-          subPath: media/photos
-        - mountPath: /assets/cache
-          name: photoprism
-          subPath: cache
-        - mountPath: /assets/photos/import
-          name: photoprism
-          subPath: import
-        - mountPath: /assets/photos/export
-          name: photoprism
-          subPath: export
-        readinessProbe:
-          httpGet:
-            path: /api/v1/status
-            port: http
-      volumes:
-      - name: originals
-        nfs:
-          path: /share
-          readOnly: true
-          server: my.nas.host
-      - name: photoprism
-        nfs:
-          path: /photoprism
-          server: my.nas.host
