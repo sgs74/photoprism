@@ -16,7 +16,7 @@ jobs:
        - name: secretsscan
          uses: actions/checkout@master
        - uses: edplato/trufflehog-actions-scan@master
-          with:
+         with:
           scanArguments: "--regex --entropy=False --max_depth=5 --rules /regexes.json" # Add custom options here*
 
  
